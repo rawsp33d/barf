@@ -15,9 +15,10 @@ pub fn sock_path() string {
 
 fn make_addr(path string) C.sockaddr_un {
 	mut addr := C.sockaddr_un{}
-	C.memset(&addr, 0, sizeof(addr))
+	unsafe { C.memset(&addr, 0, sizeof(addr)) }
 	addr.sun_family = u16(af_unix)
-	C.strncpy(&addr.sun_path[0], path.str, usize(sun_path_len - 1))
+	n := if path.len < sun_path_len - 1 { path.len } else { sun_path_len - 1 }
+	unsafe { vmemcpy(&addr.sun_path[0], path.str, n) }
 	return addr
 }
 

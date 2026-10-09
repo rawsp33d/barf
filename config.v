@@ -782,7 +782,6 @@ fn lua_var_fn(l &C.lua_State) int {
 	return 1
 }
 
-
 fn lua_var_poll_fn(l &C.lua_State) int {
 	if C.lua_type(l, 1) != lua.lua_ttable {
 		return 0

@@ -15,13 +15,6 @@ pub fn C.inotify_add_watch(fd int, pathname &char, mask u32) int
 @[typedef]
 pub struct C.fd_set {}
 
-@[typedef]
-pub struct C.timeval {
-pub mut:
-	tv_sec  i64
-	tv_usec i64
-}
-
 pub fn C.select(nfds int, readfds &C.fd_set, writefds &C.fd_set, exceptfds &C.fd_set, timeout &C.timeval) int
 pub fn C.FD_ZERO(set &C.fd_set)
 pub fn C.FD_SET(fd int, set &C.fd_set)

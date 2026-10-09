@@ -5,7 +5,7 @@ import lib.gtk
 import os
 
 #pkgconfig cairo
-#include "systray_helper.h"
+#include "@VMODROOT/widgets/systray/systray_helper.h"
 
 fn C.barf_get_watcher_interface() voidptr
 fn C.barf_systray_vtable() voidptr
@@ -317,7 +317,7 @@ fn init_dbus(icon_size int) {
 	// Try to own org.kde.StatusNotifierWatcher
 	reply := C.g_dbus_connection_call_sync(conn, c'org.freedesktop.DBus', c'/org/freedesktop/DBus',
 		c'org.freedesktop.DBus', c'RequestName', C.barf_v_su_tuple(c'org.kde.StatusNotifierWatcher',
-		u32(0)), unsafe { nil }, gio.g_dbus_call_flags_none, 5000, unsafe { nil }, unsafe { nil })
+			u32(0)), unsafe { nil }, gio.g_dbus_call_flags_none, 5000, unsafe { nil }, unsafe { nil })
 
 	if reply == unsafe { nil } {
 		eprintln('barf systray: RequestName failed')
@@ -363,7 +363,7 @@ fn init_dbus(icon_size int) {
 		// Fetch already-registered items
 		items_reply := C.g_dbus_connection_call_sync(conn, c'org.kde.StatusNotifierWatcher',
 			c'/StatusNotifierWatcher', c'org.freedesktop.DBus.Properties', c'Get', C.barf_v_ss_tuple(c'org.kde.StatusNotifierWatcher',
-			c'RegisteredStatusNotifierItems'), unsafe { nil }, gio.g_dbus_call_flags_none, 2000,
+				c'RegisteredStatusNotifierItems'), unsafe { nil }, gio.g_dbus_call_flags_none, 2000,
 			unsafe { nil }, unsafe { nil })
 
 		if items_reply != unsafe { nil } {

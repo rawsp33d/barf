@@ -53,8 +53,10 @@ pub mut:
 }
 
 pub fn new_runtime(l &C.lua_State) &LuaRuntime {
-	return &LuaRuntime{
-		l: l
+	return unsafe {
+		&LuaRuntime{
+			l: l
+		}
 	}
 }
 

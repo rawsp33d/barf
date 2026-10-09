@@ -5,7 +5,7 @@ module lua
 #include <lua.h>
 #include <lauxlib.h>
 #include <lualib.h>
-#include "lua_helpers.h"
+#include "@VMODROOT/lib/lua/lua_helpers.h"
 
 pub struct C.lua_State {}
 

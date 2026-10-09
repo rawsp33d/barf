@@ -11,7 +11,7 @@ mut:
 	gtk_combo &C.GtkWidget = unsafe { nil }
 	items     []string
 	var_name  string
-	store     &vars.VarStore  = unsafe { nil }
+	store     &vars.VarStore   = unsafe { nil }
 	gen       &vars.Generation = unsafe { nil }
 	my_gen    int
 	onchange  cmd.Command
@@ -60,15 +60,15 @@ fn on_var_change(data voidptr) {
 }
 
 pub fn make_widget(items []string, var_name string, store &vars.VarStore, gen &vars.Generation, onchange cmd.Command, shell []string, lua_rt voidptr) &C.GtkWidget {
-	combo := C.gtk_combo_box_text_new()
-	C.gtk_widget_set_name(combo, c'combo-box-text')
-	C.gtk_widget_set_valign(combo, gtk.gtk_align_center)
+	cb := C.gtk_combo_box_text_new()
+	C.gtk_widget_set_name(cb, c'combo-box-text')
+	C.gtk_widget_set_valign(cb, gtk.gtk_align_center)
 	for item in items {
-		C.gtk_combo_box_text_append_text(combo, item.str)
+		C.gtk_combo_box_text_append_text(cb, item.str)
 	}
 
 	mut state := &ComboState{
-		gtk_combo: combo
+		gtk_combo: cb
 		items:     items
 		var_name:  var_name
 		store:     store
@@ -85,12 +85,12 @@ pub fn make_widget(items []string, var_name string, store &vars.VarStore, gen &v
 		value := store.get(var_name)
 		idx := find_item_index(items, value)
 		state.changing = true
-		C.gtk_combo_box_set_active(combo, idx)
+		C.gtk_combo_box_set_active(cb, idx)
 		state.changing = false
 	}
 
-	C.g_signal_connect_data(combo, c'changed', voidptr(on_selection_changed), voidptr(state),
+	C.g_signal_connect_data(cb, c'changed', voidptr(on_selection_changed), voidptr(state),
 		unsafe { nil }, 0)
 
-	return combo
+	return cb
 }

@@ -13,6 +13,9 @@ import widgets.label
 import widgets.systray
 import widgets.workspaces
 
+// GObject upcasts (GtkWidget* -> GtkContainer*, callback fn pointers) are legal via GTK's own cast macros, but plain C sees them as mismatches.
+#flag -Wno-error=incompatible-pointer-types
+
 struct AppData {
 mut:
 	config          Config

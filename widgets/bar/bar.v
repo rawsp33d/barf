@@ -1,7 +1,7 @@
 module bar
 
 import cmd
-import json
+import json2
 import lib.gtk
 import lib.layershell
 import lib.lua
@@ -79,7 +79,7 @@ fn get_hypr_monitors() []HyprMon {
 	if result.exit_code != 0 {
 		return []
 	}
-	return json.decode([]HyprMon, result.output) or { [] }
+	return json2.decode[[]HyprMon](result.output) or { [] }
 }
 
 fn match_monitor(monitors []HyprMon, x int, y int) cmd.MonitorInfo {

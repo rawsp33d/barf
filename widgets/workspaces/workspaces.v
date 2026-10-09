@@ -2,7 +2,7 @@ module workspaces
 
 import cmd
 import lib.gtk
-import json
+import json2
 import net.unix
 import os
 import time
@@ -74,7 +74,7 @@ pub fn make_widget(active_color string, monitor_name string, on_click cmd.Comman
 fn poll(mut state WorkspaceState) {
 	ws_result := os.execute('hyprctl workspaces -j')
 	if ws_result.exit_code == 0 {
-		all_ws := json.decode([]HyprWorkspace, ws_result.output) or { [] }
+		all_ws := json2.decode[[]HyprWorkspace](ws_result.output) or { [] }
 		if state.monitor_name.len > 0 {
 			state.workspaces = all_ws.filter(it.monitor == state.monitor_name)
 		} else {
@@ -87,7 +87,7 @@ fn poll(mut state WorkspaceState) {
 
 	mon_result := os.execute('hyprctl monitors -j')
 	if mon_result.exit_code == 0 {
-		monitors := json.decode([]HyprMonitor, mon_result.output) or { [] }
+		monitors := json2.decode[[]HyprMonitor](mon_result.output) or { [] }
 		for m in monitors {
 			if m.name == state.monitor_name {
 				state.active_id = m.active_workspace.id
@@ -107,7 +107,6 @@ fn render(mut state WorkspaceState) {
 
 	has_clicks := state.on_click.is_set() || state.on_right_click.is_set()
 		|| state.on_middle_click.is_set()
-	has_drop := state.on_drop.is_set()
 
 	for ws in state.workspaces {
 		if ws.id < 0 && ws.name.contains('special:') {
@@ -179,7 +178,7 @@ fn watch(mut state WorkspaceState) {
 				line := partial[..idx]
 				partial = partial[idx + 1..]
 				if handle_event(line) {
-					C.g_idle_add(voidptr(idle_update), state)
+					C.g_idle_add(voidptr(idle_update), &state)
 				}
 			}
 		}
